@@ -7,9 +7,11 @@ import 'package:newsapp/viewmodel/bookmarks_provider.dart';
 import 'package:newsapp/viewmodel/darkmode_provider.dart';
 import 'package:newsapp/viewmodel/news_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WebViewPlatform.instance;
   runApp(MyApp());
 }
 

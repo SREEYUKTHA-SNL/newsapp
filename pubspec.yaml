@@ -40,6 +40,8 @@ dependencies:
   intl: ^0.18.0
   shared_preferences: ^2.1.1
   webview_flutter: ^4.2.2
+  # webview_flutter_android: ^4.3.2
+  # webview_flutter_wkwebview: ^3.22.0
 
 
 dev_dependencies:

@@ -43,12 +43,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
       return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ArticleWebViewPage(url: url),
-      ),
-    );
+    
   }
 
   @override
@@ -81,15 +76,28 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
               itemBuilder: (ctx, i) {
                 final article = newsProv.articles[i];
 
-                return Card(
+              return Card(
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
-                    onTap: () => _openArticleWebView(context, article.url),
+                    onTap: () {
+                      if (article.url.toString().isNotEmpty) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  webview_page(url: article.url.toString()),
+                            ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Invalid Url')));
+                      }
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Row(
@@ -99,17 +107,18 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                             borderRadius: BorderRadius.circular(12),
                             child: article.urlToImage != null
                                 ? Image.network(
-                            article.urlToImage!,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(
+                                    article.urlToImage!,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Container(
                                       color: Colors.grey.shade300,
                                       height: 100,
                                       width: 100,
-                                      child: const Icon(Icons.broken_image, size: 40),
+                                      child: const Icon(Icons.broken_image,
+                                          size: 40),
                                     ),
-                          )
+                                  )
                                 : Container(
                                     height: 100,
                                     width: 100,
@@ -134,11 +143,12 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                                     article.description!,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                  //  style: theme.textTheme.bodyText2,
+                                    //  style: theme.textTheme.bodyText2,
                                   ),
                                 const SizedBox(height: 6),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       article.sourceName ?? '',
@@ -161,15 +171,18 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                           ),
                           Consumer<BookmarksProvider>(
                             builder: (context, bookmarksProvider, _) {
-                              final isBookmarked = bookmarksProvider.isBookmarked(article);
+                              final isBookmarked =
+                                  bookmarksProvider.isBookmarked(article);
                               return IconButton(
                                 icon: Icon(
                                   isBookmarked
                                       ? Icons.bookmark_rounded
                                       : Icons.bookmark_outline_rounded,
-                                  color: isBookmarked ? Colors.blue : Colors.grey,
+                                  color:
+                                      isBookmarked ? Colors.blue : Colors.grey,
                                 ),
-                                onPressed: () => bookmarksProvider.toggleBookmark(article),
+                                onPressed: () =>
+                                    bookmarksProvider.toggleBookmark(article),
                               );
                             },
                           ),
